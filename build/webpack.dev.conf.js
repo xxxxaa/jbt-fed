@@ -13,9 +13,6 @@ Object.keys(baseWebpackConfig.entry).forEach(function (name) {
 })
 
 module.exports = merge(baseWebpackConfig, {
-  module: {
-    loaders: utils.styleLoaders({ sourceMap: config.dev.cssSourceMap })
-  },
   // eval-source-map is faster for development
   devtool: '#eval-source-map',
   plugins: [
@@ -51,11 +48,10 @@ function getEntry(globPath) {
 
   glob.sync(globPath).forEach(function (entry) {
     basename = path.basename(entry, path.extname(entry));
-    tmp = entry.split('/').splice(-3);
+    tmp = entry.split('/').splice(2);
 
     pathname = ''
     for(var i = 0; i < tmp.length - 1; i++){
-      console.log(tmp[i])
       pathname = pathname + tmp[i] + '/';
     }
     //pathname = tmp.splice(0, 1) + '/' + basename; // 正确输出js和html的路径
