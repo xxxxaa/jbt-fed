@@ -20,13 +20,13 @@ module.exports = {
     filename: '[name].js'
   },
   resolve: {
-    extensions: ['', '.js', '.vue'],
+    extensions: ['', '.js'],
     fallback: [path.join(__dirname, '../node_modules')],
     alias: {
-      'vue$': 'vue/dist/vue',
       'src': path.resolve(__dirname, '../src'),
       'assets': path.resolve(__dirname, '../src/assets'),
-      'components': path.resolve(__dirname, '../src/components')
+      'components': path.resolve(__dirname, '../src/components'),
+      'module': path.resolve(__dirname, '../src/module')
     }
   },
   resolveLoader: {
@@ -34,10 +34,6 @@ module.exports = {
   },
   module: {
     loaders: [
-      {
-        test: /\.vue$/,
-        loader: 'vue'
-      },
       {
         test: /\.js$/,
         loader: 'babel',
@@ -63,15 +59,11 @@ module.exports = {
           limit: 10000,
           name: utils.assetsPath('fonts/[name].[hash:7].[ext]')
         }
+      },
+      {
+        test: /\.less$/,
+        loader: 'style-loader!css-loader!less-loader'
       }
-    ]
-  },
-  vue: {
-    loaders: utils.cssLoaders({ sourceMap: useCssSourceMap }),
-    postcss: [
-      require('autoprefixer')({
-        browsers: ['last 2 versions']
-      })
     ]
   }
 }
@@ -94,13 +86,11 @@ function getEntry(globPath) {
   var entries = {},
     basename, tmp, pathname;
 
-  glob.sync(globPath).forEach(function (entry) {
+  glob.sync(globPath, 'matchBase').forEach(function (entry) {
     basename = path.basename(entry, path.extname(entry));
-    tmp = entry.split('/').splice(-3);
-
+    tmp = entry.split('/').splice(2);
     pathname = ''
     for(var i = 0; i < tmp.length - 1; i++){
-      console.log(tmp[i])
       pathname = pathname + tmp[i] + '/';
     }
     //pathname = tmp.splice(0, 1) + '/' + basename; // 正确输出js和html的路径

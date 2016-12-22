@@ -11,20 +11,11 @@ var glob = require('glob');
 var env = config.build.env
 
 var webpackConfig = merge(baseWebpackConfig, {
-  module: {
-    loaders: utils.styleLoaders({ sourceMap: config.build.productionSourceMap, extract: true })
-  },
   devtool: config.build.productionSourceMap ? '#source-map' : false,
   output: {
     path: config.build.assetsRoot,
     filename: utils.assetsPath('js/[name].[chunkhash].js'),
     chunkFilename: utils.assetsPath('js/[id].[chunkhash].js')
-  },
-  vue: {
-    loaders: utils.cssLoaders({
-      sourceMap: config.build.productionSourceMap,
-      extract: true
-    })
   },
   plugins: [
     // http://vuejs.github.io/vue-loader/workflow/production.html
@@ -105,11 +96,10 @@ function getEntry(globPath) {
 
   glob.sync(globPath).forEach(function (entry) {
     basename = path.basename(entry, path.extname(entry));
-    tmp = entry.split('/').splice(-3);
+    tmp = entry.split('/').splice(2);
 
     pathname = ''
     for(var i = 0; i < tmp.length - 1; i++){
-      console.log(tmp[i])
       pathname = pathname + tmp[i] + '/';
     }
     //pathname = tmp.splice(0, 1) + '/' + basename; // 正确输出js和html的路径
